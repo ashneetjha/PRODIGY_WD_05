@@ -1,55 +1,36 @@
-const API_KEY = "74eb9c0415bdebbf3dfe446ddd81aab3"; // Your OpenWeatherMap API Key
+const apiKey = "74eb9c0415bdebbf3dfe446ddd81aab3";
 
-document.addEventListener("DOMContentLoaded", () => {
-    const searchButton = document.getElementById("searchButton");
-    const searchInput = document.getElementById("searchInput");
-    const weatherContainer = document.getElementById("weatherContainer");
+function getWeather() {
+    const city = document.getElementById("cityInput").value.trim();
+    if (!city) {
+        alert("Please enter a city name.");
+        return;
+    }
 
-    searchButton.addEventListener("click", () => {
-        const city = searchInput.value.trim();
-        if (city !== "") {
-            fetchWeather(city);
-        }
-    });
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-    searchInput.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            const city = searchInput.value.trim();
-            if (city !== "") {
-                fetchWeather(city);
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.cod !== 200) {
+                alert("City not found. Please try again.");
+                return;
             }
-        }
-    });
 
-    function fetchWeather(city) {
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+            const weatherContainer = document.getElementById("weatherContainer");
+            const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => displayWeather(data))
-            .catch(error => {
-                weatherContainer.innerHTML = `<p class="error">Error fetching weather data. Please try again.</p>`;
-                console.error("Error:", error);
-            });
-    }
-
-    function displayWeather(data) {
-        if (data.cod !== 200) {
-            weatherContainer.innerHTML = `<p class="error">City not found. Please enter a valid city name.</p>`;
-            return;
-        }
-
-        const { name, main, weather, wind } = data;
-        weatherContainer.innerHTML = `
-            <div class="weather-card">
-                <h2>${name}</h2>
-                <p><strong>Temperature:</strong> ${main.temp}°C</p>
-                <p><strong>Feels Like:</strong> ${main.feels_like}°C</p>
-                <p><strong>Humidity:</strong> ${main.humidity}%</p>
-                <p><strong>Wind Speed:</strong> ${wind.speed} m/s</p>
-                <p><strong>Weather:</strong> ${weather[0].main} - ${weather[0].description}</p>
-                <img src="https://openweathermap.org/img/wn/${weather[0].icon}.png" alt="Weather Icon">
-            </div>
-        `;
-    }
-});
+            weatherContainer.innerHTML = `
+                <h2>${data.name}, ${data.sys.country}</h2>
+                <h3>${data.weather[0].main} - ${data.weather[0].description}</h3>
+                <img src="${iconUrl}" alt="Weather Icon">
+                <h3>🌡️ Temperature: ${data.main.temp}°C</h3>
+                <h3>💨 Wind Speed: ${data.wind.speed} m/s</h3>
+                <h3>💧 Humidity: ${data.main.humidity}%</h3>
+            `;
+        })
+        .catch(error => {
+            alert("Error fetching weather data. Please try again.");
+            console.error("Fetch error:", error);
+        });
+}

@@ -1,39 +1,86 @@
+/* Modern Weather App Styles */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: linear-gradient(to right, #4facfe, #00f2fe);
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
     color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .container {
-    margin-top: 50px;
-    padding: 20px;
+    width: 90%;
+    max-width: 400px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    display: inline-block;
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.03);
+}
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 input {
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px;
+    width: 70%;
     border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
 }
 
 button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    background-color: #ff9800;
+    background: #ff7b00;
     color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-left: 10px;
+    font-size: 16px;
+    transition: background 0.3s ease;
 }
 
 button:hover {
-    background-color: #e68900;
+    background: #e06a00;
 }
 
-#weatherResult {
+.weather-container {
     margin-top: 20px;
-    font-size: 18px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.weather-container img {
+    width: 120px;
+    height: 120px;
+    animation: float 1.5s infinite ease-in-out alternate;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
 }
